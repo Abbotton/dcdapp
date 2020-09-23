@@ -55,30 +55,36 @@ $(document).ready(function () {
             }
             console.log('正在采集第' + (page + 1) + '页数据');
             loading = true;
-            $.post(
-                'https://www.dcdapp.com/motor/brand/m/v1/select/series/?city_name=%E5%A4%AA%E5%8E%9',
-                { limit: 200, is_refresh: 1, city_name: '%E5%A4%AA%E5%8E%9', offset: page },
-                function (data) {
-                    if (data.data.series.length == 0) {
-                        flag = false;
-                        download(carBrands, 'car_brands.json');
-                        download(carSeries, 'car_series.json');
-                        download(cars, 'cars.json');
-                    } else {
-                        $(data.data.series).each((i, v) => {
-                            carSeries.push({
-                                id: v.id,
-                                brand_id: v.brand_id,
-                                car_ids: v.car_ids,
-                                cover_url: v.cover_url
+            var randomOne = Math.floor(Math.random() * (10 - 1) + 1);
+            setTimeout(function () {
+                $.post(
+                    'https://www.dcdapp.com/motor/brand/m/v1/select/series/?city_name=%E5%A4%AA%E5%8E%9',
+                    { limit: 200, is_refresh: 1, city_name: '%E5%A4%AA%E5%8E%9', offset: page },
+                    function (data) {
+                        if (data.data.series.length == 0) {
+                            flag = false;
+                            download(carBrands, 'car_brands.json');
+                            download(carSeries, 'car_series.json');
+                            download(cars, 'cars.json');
+                        } else {
+                            $(data.data.series).each((i, v) => {
+                                carSeries.push({
+                                    id: v.id,
+                                    brand_id: v.brand_id,
+                                    car_ids: v.car_ids,
+                                    cover_url: v.cover_url
+                                });
+                                var randomTwo = Math.floor(Math.random() * (10 - 1) + 1);
+                                setTimeout(function () {
+                                    getCars(v.id);
+                                }, randomTwo * 1000);
                             });
-                            getCars(v.id);
-                        });
+                        }
+                        page++;
+                        loading = false;
                     }
-                    page++;
-                    loading = false;
-                }
-            );
+                );
+            }, randomOne * 1000);
         }
         $('#go').text('采集完毕');
     };
