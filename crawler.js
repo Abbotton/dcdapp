@@ -70,6 +70,7 @@ $(document).ready(function () {
                             $(data.data.series).each((i, v) => {
                                 carSeries.push({
                                     id: v.id,
+                                    name: v.outter_name,
                                     brand_id: v.brand_id,
                                     car_ids: v.car_ids,
                                     cover_url: v.cover_url
